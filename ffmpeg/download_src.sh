@@ -10,3 +10,5 @@ git clone git://source.ffmpeg.org/ffmpeg.git
 (cd ffmpeg; git checkout n3.0)
 git clone https://github.com/cisco/openh264.git
 (cd openh264; git checkout v1.4.0)
+git clone https://chromium.googlesource.com/webm/libvpx.git
+(cd libvpx; git checkout v1.5.0)
