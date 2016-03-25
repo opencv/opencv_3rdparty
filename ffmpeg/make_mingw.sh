@@ -10,7 +10,7 @@
 #
 CURRENT_DIR=`pwd`
 BUILD_DIR=${1:-.}
-CPU_COUNT=12
+CPU_COUNT=$(nproc || echo 4)
 
 ## Libvpx
 
@@ -22,6 +22,8 @@ if [ ! -d ${libvpx_DIR} ]; then
   echo "Libvpx source tree is not found"
   exit 1
 fi
+#[ -d ${libvpx_x86_DIR} ] ||
+(
 cd ${libvpx_DIR}
 mkdir -p ${libvpx_x86_DIR}
 rsync -a ./ ${libvpx_x86_DIR} --exclude .git
@@ -29,7 +31,9 @@ cd ${libvpx_x86_DIR}
 CROSS=i686-w64-mingw32- ./configure --target=x86-win32-gcc ${libvpx_configure_OPTIONS} --prefix=${libvpx_x86_DIR}
 make -j ${CPU_COUNT}
 make install
-
+)
+#[ -d ${libvpx_x64_DIR} ] ||
+(
 cd ${libvpx_DIR}
 mkdir -p ${libvpx_x64_DIR}
 rsync -a ./ ${libvpx_x64_DIR} --exclude .git
@@ -37,6 +41,7 @@ cd ${libvpx_x64_DIR}
 CROSS=x86_64-w64-mingw32- ./configure --target=x86_64-win64-gcc ${libvpx_configure_OPTIONS} --prefix=${libvpx_x64_DIR}
 make -j ${CPU_COUNT}
 make install
+)
 
 ## Open264
 
@@ -72,13 +77,14 @@ fi
 
 FFMPEG_x86_DIR=${BUILD_DIR}/ffmpeg_x86
 FFMPEG_x86_64_DIR=${BUILD_DIR}/ffmpeg_x86_64
+FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-w32threads --enable-libopenh264 --enable-libvpx --disable-filters --disable-bsfs --disable-hwaccels --disable-programs --disable-debug"
 #[ -d ${FFMPEG_x86_DIR} ] ||
 (
  cd ${FFMPEG_DIR}
  mkdir -p ${FFMPEG_x86_DIR}
  rsync -a ./ ${FFMPEG_x86_DIR} --exclude .git
  cd ${FFMPEG_x86_DIR}
- PKG_CONFIG_PATH=${openh264_DIR}/install/lib/pkgconfig:${libvpx_x86_DIR}/lib/pkgconfig ./configure --enable-cross-compile --arch=x86 --target-os=mingw32 --cross-prefix=i686-w64-mingw32- --pkg-config=pkg-config --enable-static --enable-w32threads --enable-libopenh264 --enable-libvpx --disable-filters --disable-bsfs --disable-hwaccels --disable-programs --disable-debug --prefix=`pwd`/install
+ PKG_CONFIG_PATH=${openh264_DIR}/install/lib/pkgconfig:${libvpx_x86_DIR}/lib/pkgconfig ./configure --enable-cross-compile --arch=x86 --target-os=mingw32 --cross-prefix=i686-w64-mingw32- ${FFMPEG_CONFIGURE_OPTIONS} --prefix=`pwd`/install
  make -j${CPU_COUNT} install
 )
 #[ -d ${FFMPEG_x86_64_DIR} ] ||
@@ -87,7 +93,7 @@ FFMPEG_x86_64_DIR=${BUILD_DIR}/ffmpeg_x86_64
  mkdir -p ${FFMPEG_x86_64_DIR}
  rsync -a ./ ${FFMPEG_x86_64_DIR} --exclude .git
  cd ${FFMPEG_x86_64_DIR}
- PKG_CONFIG_PATH=${openh264_DIR}/install/lib/pkgconfig:${libvpx_x64_DIR}/lib/pkgconfig ./configure --enable-cross-compile --arch=x86_64 --target-os=mingw32 --cross-prefix=x86_64-w64-mingw32- --pkg-config=pkg-config --enable-static --enable-w32threads --enable-libopenh264 --enable-libvpx --disable-filters --disable-bsfs --disable-hwaccels --disable-programs --disable-debug --prefix=`pwd`/install
+ PKG_CONFIG_PATH=${openh264_DIR}/install/lib/pkgconfig:${libvpx_x64_DIR}/lib/pkgconfig ./configure --enable-cross-compile --arch=x86_64 --target-os=mingw32 --cross-prefix=x86_64-w64-mingw32- ${FFMPEG_CONFIGURE_OPTIONS} --prefix=`pwd`/install
  make -j${CPU_COUNT} install
 )
 

@@ -4,10 +4,8 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
 # Build Docker image
 docker build -t opencv_ffmpeg_mingw_build docker
 
-if [ ! -d ../build/ffmpeg ]; then
-  echo "Build directory was not found. Need to download 3rdparty sources..."
-  ./download_src.sh
-fi
+echo "Downloading 3rdparty sources..."
+./download_src.sh
 
 echo "Running docker container:"
 docker run --rm=true -it --name opencv_ffmpeg_mingw_build \

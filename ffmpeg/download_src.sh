@@ -1,14 +1,26 @@
 #!/bin/bash -ex
 #
 # This scripts creates build directory with:
-# - ffmpeg: source tree, with fetched tag: n2.7.1 (git://source.ffmpeg.org/ffmpeg.git)
-# - openh264: source tree, with fetched tag: v1.4.0 (https://github.com/cisco/openh264.git)
-#
+# - ffmpeg source tree (git://source.ffmpeg.org/ffmpeg.git)
+# - openh264 source tree (https://github.com/cisco/openh264.git)
+# - libvpx source tree (https://chromium.googlesource.com/webm/libvpx.git)
+
+update() {
+  DIR=$1
+  URL=$2
+  TAG=$3
+  [[ -d $DIR ]] || git clone $URL $DIR
+  (
+    cd $DIR
+    git fetch $URL $TAG
+    git checkout $TAG
+  ) || exit 1
+}
+
 mkdir -p ../build
+(
 cd ../build
-git clone git://source.ffmpeg.org/ffmpeg.git
-(cd ffmpeg; git checkout n3.0)
-git clone https://github.com/cisco/openh264.git
-(cd openh264; git checkout v1.4.0)
-git clone https://chromium.googlesource.com/webm/libvpx.git
-(cd libvpx; git checkout v1.5.0)
+update ffmpeg git://source.ffmpeg.org/ffmpeg.git n3.0
+update openh264 https://github.com/cisco/openh264.git v1.5.0
+update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.5.0
+)

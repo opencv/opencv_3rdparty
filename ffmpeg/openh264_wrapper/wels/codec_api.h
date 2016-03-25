@@ -69,57 +69,65 @@ static FN_WelsGetCodecVersionEx p_WelsGetCodecVersionEx = WelsGetCodecVersionEx_
 #include <dlfcn.h>
 #endif
 
-static void loadLibrary(void)
-{
-    static bool initialized = false;
-    if (initialized)
-        return;
-    {  // load logic start
-
-    int errors = 0;
-    const char* libraryName = getenv("OPENH264_LIBRARY_PATH");
-    void *fn_addr = NULL;
-
-// Windows
 #ifdef _WIN32
-    HMODULE handle = NULL;
-    if (libraryName == NULL)
-        libraryName =
-#if defined _M_X64 || defined __x86_64__
-            "openh264-1.4.0-win64msvc.dll"
+#define LIBRARY_HANDLE_TYPE HANDLE
 #else
-            "openh264-1.4.0-win32msvc.dll"
+#define LIBRARY_HANDLE_TYPE void*
 #endif
-        ;
-    handle = LoadLibraryA(libraryName);
+static int _loadLibrary(const char* name, LIBRARY_HANDLE_TYPE* handle)
+{
+#ifdef _WIN32
+    *handle = LoadLibraryA(name);
 #define GETADDR(name) GetProcAddress(handle, #name)
-
-// Linux/Unix based on dlopen/dlsym
 #elif defined __linux__ || defined __APPLE__
-    void* handle = NULL;
-    if (libraryName == NULL)
-        libraryName =
-#if defined __linux__
-# if defined __x86_64__
-            "libopenh264-1.4.0-linux64.so"
-# else
-            "libopenh264-1.4.0-linux32.so"
-# endif
-#else // __APPLE__
-# if defined __x86_64__
-            "libopenh264-1.4.0-osx64.dylib"
-# else
-            "libopenh264-1.4.0-osx32.dylib"
-# endif
-#endif
-        ;
-    handle = dlopen(libraryName, RTLD_LAZY | RTLD_GLOBAL);
+    *handle = dlopen(name, RTLD_LAZY | RTLD_GLOBAL);
 #define GETADDR(name) dlsym(handle, #name)
-
 #else
 #error "Not supported platform"
 #endif
-    if (handle == NULL)
+    return (handle != NULL) ? 1 : 0;
+}
+
+
+static void _initLibrary(void)
+{
+    static const char* defaultLibraryName =
+#ifdef _WIN32
+#if defined _M_X64 || defined __x86_64__
+        "openh264-1.5.0-win64msvc.dll"
+#else
+        "openh264-1.5.0-win32msvc.dll"
+#endif
+// Linux/Unix based on dlopen/dlsym
+#elif defined __linux__
+# if defined __x86_64__
+        "libopenh264-1.5.0-linux64.so"
+# else
+        "libopenh264-1.5.0-linux32.so"
+# endif
+#elif defined __APPLE__
+# if defined __x86_64__
+        "libopenh264-1.5.0-osx64.dylib"
+# else
+        "libopenh264-1.5.0-osx32.dylib"
+# endif
+#else
+#error "Not supported platform"
+#endif
+    ;
+
+    int errors = 0;
+    void *fn_addr = NULL;
+
+    const char* forced_name = getenv("OPENH264_LIBRARY");
+    const char* libraryName = forced_name == NULL ? defaultLibraryName : forced_name;
+
+    LIBRARY_HANDLE_TYPE handle = NULL;
+    if (_loadLibrary(libraryName, &handle) == 0)
+    {
+        errors++;
+    }
+    else if (handle == NULL)
     {
         errors++;
     }
@@ -145,24 +153,36 @@ static void loadLibrary(void)
     }
 #undef FILLADDR
 #undef GETADDR
+#undef LIBRARY_HANDLE_TYPE
     if (errors == 0)
+    {
         fprintf(stderr, "\n\tOpenH264 Video Codec provided by Cisco Systems, Inc.\n\n");
+    }
     else
-        fprintf(stderr, "\nFailed to load OpenH264 library: %s\n\tPlease check environment and/or download library from here: https://github.com/cisco/openh264/releases\n\n", libraryName);
+    {
+        fprintf(stderr, "\nFailed to load OpenH264 library: %s\n", libraryName);
+        fprintf(stderr, "\tPlease check environment and/or download library: https://github.com/cisco/openh264/releases\n\n");
+    }
+}
 
-    } // load logic end
+static void initLibrary(void)
+{
+    static bool initialized = false;
+    if (initialized)
+        return;
+    _initLibrary();
     initialized = true;
 }
 
 #define WRAP(name, ret_type, decl_args, call_args) \
 static ret_type name decl_args { \
-    loadLibrary(); \
+    initLibrary(); \
     return p_ ## name call_args; \
 }
 
 #define WRAP_VOID(name, decl_args, call_args) \
 static void name decl_args { \
-    loadLibrary(); \
+    initLibrary(); \
     p_ ## name call_args; \
 }
 
