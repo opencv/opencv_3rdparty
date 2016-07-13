@@ -77,7 +77,7 @@ fi
 
 FFMPEG_x86_DIR=${BUILD_DIR}/ffmpeg_x86
 FFMPEG_x86_64_DIR=${BUILD_DIR}/ffmpeg_x86_64
-FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-w32threads --enable-libopenh264 --enable-libvpx --disable-filters --disable-bsfs --disable-hwaccels --disable-programs --disable-debug"
+FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-avresample --enable-w32threads --enable-libopenh264 --enable-libvpx --disable-filters --disable-bsfs --disable-hwaccels --disable-programs --disable-debug"
 #[ -d ${FFMPEG_x86_DIR} ] ||
 (
  cd ${FFMPEG_DIR}
@@ -104,7 +104,7 @@ if [ ! -d ${OPENCV_LOCATION} ]; then
 fi
 i686-w64-mingw32-gcc \
  -m32 -s -Wall -shared -o ${CURRENT_DIR}/opencv_ffmpeg.dll -O2 -x c++ -I${FFMPEG_x86_DIR}/install/include -I${OPENCV_LOCATION}/modules/videoio/src ${CURRENT_DIR}/ffopencv.c \
- -L${FFMPEG_x86_DIR}/install/lib -L${libvpx_x86_DIR}/lib -lavformat -lavcodec -lavdevice -lswscale -lavutil -lvpx -lws2_32 -lswresample -static -static-libgcc -static-libstdc++ -Wl,-Bstatic
+ -L${FFMPEG_x86_DIR}/install/lib -L${libvpx_x86_DIR}/lib -lavformat -lavcodec -lavdevice -lswscale -lavutil -lvpx -lsecur32 -lws2_32 -lswresample -static -static-libgcc -static-libstdc++ -Wl,-Bstatic
 x86_64-w64-mingw32-gcc \
  -m64 -s -Wall -shared -o ${CURRENT_DIR}/opencv_ffmpeg_64.dll -O2 -x c++ -I${FFMPEG_x86_64_DIR}/install/include -I${OPENCV_LOCATION}/modules/videoio/src ${CURRENT_DIR}/ffopencv.c \
- -L${FFMPEG_x86_64_DIR}/install/lib -L${libvpx_x64_DIR}/lib -lavformat -lavcodec -lavdevice -lswscale -lavutil -lvpx -lws2_32 -lswresample -static -static-libgcc -static-libstdc++ -Wl,-Bstatic
+ -L${FFMPEG_x86_64_DIR}/install/lib -L${libvpx_x64_DIR}/lib -lavformat -lavcodec -lavdevice -lswscale -lavutil -lvpx -lsecur32 -lws2_32 -lswresample -static -static-libgcc -static-libstdc++ -Wl,-Bstatic

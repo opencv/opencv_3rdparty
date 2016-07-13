@@ -12,7 +12,7 @@ update() {
   [[ -d $DIR ]] || git clone $URL $DIR
   (
     cd $DIR
-    git fetch $URL $TAG
+    git fetch -t $URL $TAG
     git checkout $TAG
   ) || exit 1
 }
@@ -20,7 +20,7 @@ update() {
 mkdir -p ../build
 (
 cd ../build
-update ffmpeg git://source.ffmpeg.org/ffmpeg.git n3.0
+update ffmpeg git://source.ffmpeg.org/ffmpeg.git n3.1.1
 update openh264 https://github.com/cisco/openh264.git v1.5.0
 update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.5.0
 )
