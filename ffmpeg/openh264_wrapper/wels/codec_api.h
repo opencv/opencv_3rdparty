@@ -28,6 +28,18 @@
 #undef WelsGetCodecVersion
 #undef WelsGetCodecVersionEx
 
+// Declarations
+int WelsCreateSVCEncoder(ISVCEncoder** ppEncoder);
+void WelsDestroySVCEncoder(ISVCEncoder* pEncoder);
+int WelsGetDecoderCapability(SDecoderCapability* pDecCapability);
+long WelsCreateDecoder(ISVCDecoder** ppDecoder);
+void WelsDestroyDecoder(ISVCDecoder* pDecoder);
+OpenH264Version WelsGetCodecVersion(void);
+void WelsGetCodecVersionEx(OpenH264Version *pVersion);
+
+
+#ifdef OPENH264WRAPPER_WITH_IMPLEMENTATION
+
 // Fallback
 // TODO Calling convention?
 static int WelsCreateSVCEncoder_fallback (ISVCEncoder** ppEncoder) { return 1; /*error*/ }
@@ -94,22 +106,22 @@ static void _initLibrary(void)
     static const char* defaultLibraryName =
 #ifdef _WIN32
 #if defined _M_X64 || defined __x86_64__
-        "openh264-1.5.0-win64msvc.dll"
+        "openh264-1.6.0-win64msvc.dll"
 #else
-        "openh264-1.5.0-win32msvc.dll"
+        "openh264-1.6.0-win32msvc.dll"
 #endif
 // Linux/Unix based on dlopen/dlsym
 #elif defined __linux__
 # if defined __x86_64__
-        "libopenh264-1.5.0-linux64.so"
+        "libopenh264-1.6.0-linux64.so"
 # else
-        "libopenh264-1.5.0-linux32.so"
+        "libopenh264-1.6.0-linux32.so"
 # endif
 #elif defined __APPLE__
 # if defined __x86_64__
-        "libopenh264-1.5.0-osx64.dylib"
+        "libopenh264-1.6.0-osx64.dylib"
 # else
-        "libopenh264-1.5.0-osx32.dylib"
+        "libopenh264-1.6.0-osx32.dylib"
 # endif
 #else
 #error "Not supported platform"
@@ -175,13 +187,13 @@ static void initLibrary(void)
 }
 
 #define WRAP(name, ret_type, decl_args, call_args) \
-static ret_type name decl_args { \
+ret_type name decl_args { \
     initLibrary(); \
     return p_ ## name call_args; \
 }
 
 #define WRAP_VOID(name, decl_args, call_args) \
-static void name decl_args { \
+void name decl_args { \
     initLibrary(); \
     p_ ## name call_args; \
 }
@@ -194,7 +206,6 @@ WRAP_VOID(WelsDestroyDecoder, (ISVCDecoder* pDecoder), (pDecoder) )
 WRAP(WelsGetCodecVersion, OpenH264Version, (void), () )
 WRAP_VOID(WelsGetCodecVersionEx, (OpenH264Version *pVersion), (pVersion) )
 
-#undef WRAP
-#undef WRAP_VOID
+#endif
 
 #endif // __WELS_VIDEO_CODEC_SVC_API_WRAPPER_H__
