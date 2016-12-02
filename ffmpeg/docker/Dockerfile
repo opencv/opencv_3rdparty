@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 RUN \
   apt-get update && \
@@ -19,7 +19,7 @@ RUN \
 RUN \
   apt-get update && \
   apt-get install -y \
-    mingw-w64 mingw32 g++-mingw-w64-x86-64 g++-mingw-w64-i686 yasm nasm \
+    mingw-w64 g++-mingw-w64-x86-64 g++-mingw-w64-i686 yasm nasm \
     && \
   rm -rf /var/lib/apt/lists/*
 
