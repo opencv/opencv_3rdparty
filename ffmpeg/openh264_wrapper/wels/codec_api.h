@@ -106,22 +106,22 @@ static void _initLibrary(void)
     static const char* defaultLibraryName =
 #ifdef _WIN32
 #if defined _M_X64 || defined __x86_64__
-        "openh264-1.6.0-win64msvc.dll"
+        "openh264-1.7.0-win64.dll"
 #else
-        "openh264-1.6.0-win32msvc.dll"
+        "openh264-1.7.0-win32.dll"
 #endif
 // Linux/Unix based on dlopen/dlsym
 #elif defined __linux__
 # if defined __x86_64__
-        "libopenh264-1.6.0-linux64.so"
+        "libopenh264-1.7.0-linux64.4.so"
 # else
-        "libopenh264-1.6.0-linux32.so"
+        "libopenh264-1.7.0-linux32.4.so"
 # endif
 #elif defined __APPLE__
 # if defined __x86_64__
-        "libopenh264-1.6.0-osx64.dylib"
+        "libopenh264-1.7.0-osx64.4.dylib"
 # else
-        "libopenh264-1.6.0-osx32.dylib"
+        "libopenh264-1.7.0-osx32.4.dylib"
 # endif
 #else
 #error "Not supported platform"
