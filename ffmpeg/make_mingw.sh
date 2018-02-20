@@ -1,5 +1,5 @@
 #!/bin/bash -ex
-# This file is well tested on Ubuntu 14.04
+# This file is well tested on Ubuntu
 # List of required packages for build see in docker/Dockerfile
 # (preferred way is to use Docker to produce similar environment)
 #
@@ -8,6 +8,9 @@
 # Usage ${0} <build_dir>
 # build directory should be created via download_src.sh script:
 #
+
+. ../build/env.sh
+
 CURRENT_DIR=`pwd`
 BUILD_DIR=${1:-.}
 CPU_COUNT=$(nproc || echo 4)
@@ -54,7 +57,13 @@ openh264_x86_DIR=${openh264_DIR}/install_x86
 openh264_x86_64_DIR=${openh264_DIR}/install_x86_64
 (
  cd ${openh264_DIR}
- make PREFIX=${openh264_x86_DIR} install-headers
+ if [[ "${BUILD_SKIP_DOWNLOAD_SOURCES}" == "" ]]; then
+  make PREFIX=${openh264_x86_DIR} install-headers
+ else
+  PREFIX=${openh264_x86_DIR}
+  mkdir -p ${PREFIX}/include/wels
+  install -m 644 ${openh264_DIR}/codec/api/svc/codec*.h ${PREFIX}/include/wels
+ fi
  mkdir -p ${openh264_x86_DIR}/lib/pkgconfig
  i686-w64-mingw32-gcc -m32 -O2 -I${CURRENT_DIR}/openh264_wrapper -I${openh264_x86_DIR} \
   -c ${CURRENT_DIR}/openh264_wrapper/wels/openh264_wrapper.c -o ${openh264_x86_DIR}/lib/openh264_wrapper.o
@@ -72,7 +81,13 @@ EOF
 )
 (
  cd ${openh264_DIR}
- make PREFIX=${openh264_x86_64_DIR} install-headers
+ if [[ "${BUILD_SKIP_DOWNLOAD_SOURCES}" == "" ]]; then
+  make PREFIX=${openh264_x86_64_DIR} install-headers
+ else
+  PREFIX=${openh264_x86_64_DIR}
+  mkdir -p ${PREFIX}/include/wels
+  install -m 644 ${openh264_DIR}/codec/api/svc/codec*.h ${PREFIX}/include/wels
+ fi
  mkdir -p ${openh264_x86_64_DIR}/lib/pkgconfig
  x86_64-w64-mingw32-gcc -m64 -O2 -I${CURRENT_DIR}/openh264_wrapper -I${openh264_x86_64_DIR} \
   -c ${CURRENT_DIR}/openh264_wrapper/wels/openh264_wrapper.c -o ${openh264_x86_64_DIR}/lib/openh264_wrapper.o

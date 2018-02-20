@@ -46,23 +46,31 @@ echo "### Commit ffmpeg wrapper binaries to branch ${TARGET_BRANCH}..."
   git checkout -B ${TARGET_BRANCH}
   git commit -m "Update ffmpeg binaries (${DATE}-${OPENCV_HASH})"
 )
+HASH=`git rev-parse HEAD`
 echo "### Commit ffmpeg wrapper binaries to branch ${TARGET_BRANCH}... DONE"
+[[ "${BUILD_SKIP_SOURCE_PACKAGE}" == "" ]] &&
+(
+  echo "### Adding ffmpeg wrapper sources to branch ${TARGET_BRANCH}_src ..."
+  git add -fv sources/.
+  git checkout -B ${TARGET_BRANCH}_src
+  git commit -m "src: OpenCV FFmpeg wrapper (${DATE}-${HASH})"
+)
+HASH_SRC=`git rev-parse HEAD`
 
 echo ""
 echo "1) Create pull request to OpenCV 3rdparty binaries repository with branch ${TARGET_BRANCH}"
 echo "2) Create pull request to OpenCV repository:"
 echo "   with updated hashes in <opencv>/3rdparty/ffmpeg/ffmpeg.cmake:"
-HASH=`git rev-parse HEAD`
 HASH_BIN32=($(md5sum ffmpeg/opencv_ffmpeg.dll))
 HASH_BIN64=($(md5sum ffmpeg/opencv_ffmpeg_64.dll))
 HASH_CMAKE=($(md5sum ffmpeg/ffmpeg_version.cmake))
 echo ""
-echo "# Binary branch name: ${TARGET_BRANCH}"
+echo "# Binaries branch name: ${TARGET_BRANCH}"
 echo "# Binaries were created for OpenCV: ${OPENCV_HASH}"
-echo "set(FFMPEG_BINARIES_COMMIT \"${HASH}\")"
-echo "set(FFMPEG_FILE_HASH_BIN32 \"${HASH_BIN32}\")"
-echo "set(FFMPEG_FILE_HASH_BIN64 \"${HASH_BIN64}\")"
-echo "set(FFMPEG_FILE_HASH_CMAKE \"${HASH_CMAKE}\")"
+echo "ocv_update(FFMPEG_BINARIES_COMMIT \"${HASH}\")"
+echo "ocv_update(FFMPEG_FILE_HASH_BIN32 \"${HASH_BIN32}\")"
+echo "ocv_update(FFMPEG_FILE_HASH_BIN64 \"${HASH_BIN64}\")"
+echo "ocv_update(FFMPEG_FILE_HASH_CMAKE \"${HASH_CMAKE}\")"
 echo ""
 
 echo "Checkout to branch with scripts only: ${BRANCH} ..."
