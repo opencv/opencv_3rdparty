@@ -35,7 +35,7 @@ echo "### Build ffmpeg wrapper binaries..."
 )
 echo "### Build ffmpeg wrapper binaries... DONE"
 
-DATE=`date +%Y%m%d`
+DATE=${DATE:-`date +%Y%m%d`}
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 TARGET_BRANCH="${BRANCH}_${DATE}"
 
