@@ -20,8 +20,8 @@ update() {
 mkdir -p ../build
 (
 cd ../build
-update ffmpeg git://source.ffmpeg.org/ffmpeg.git n3.4.2
-update openh264 https://github.com/cisco/openh264.git v1.7.0
+update ffmpeg git://source.ffmpeg.org/ffmpeg.git n4.0.2
+update openh264 https://github.com/cisco/openh264.git v1.8.0
 update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.7.0
 )
 
