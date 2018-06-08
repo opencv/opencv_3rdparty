@@ -1,8 +1,8 @@
 #include <winver.h>
 
 VS_VERSION_INFO         VERSIONINFO
-  FILEVERSION           2018,6,0,0
-  PRODUCTVERSION        2018,6,0,0
+  FILEVERSION           2018,11,0,0
+  PRODUCTVERSION        2018,11,0,0
   FILEFLAGSMASK         VS_FFI_FILEFLAGSMASK
 #ifdef _DEBUG
   FILEFLAGS             1
@@ -18,14 +18,14 @@ BEGIN
     BLOCK "040904E4"
     BEGIN
       VALUE "FileDescription",	"OpenCV 3.4 FFmpeg wrapper\0"
-      VALUE "FileVersion",	"2018.06.0\0"
+      VALUE "FileVersion",	"2018.11.0\0"
       VALUE "InternalName",	"opencv_ffmpeg\0"
 #if 0
       VALUE "LegalCopyright",	"\0"
 #endif
       VALUE "OriginalFilename",	"opencv_ffmpeg.dll\0"
       VALUE "ProductName",	"OpenCV 3.4 FFmpeg wrapper\0"
-      VALUE "ProductVersion",	"2018.06.0\0"
+      VALUE "ProductVersion",	"2018.11.0\0"
 #if 1
       VALUE "Comments",		"http://opencv.org/\0"
 #endif
