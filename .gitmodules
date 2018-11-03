@@ -1,4 +1,4 @@
 [submodule "opencv"]
 	path = opencv
 	url = ../opencv.git
-	branch = master
+	branch = 3.4
