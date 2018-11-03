@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -ex
 
 rm -rf ../sources
 mkdir -p ../sources
@@ -29,3 +29,8 @@ git archive --format=tar HEAD codec/api/svc LICENSE | xz -c - > ../../sources/bu
 cd ../build/libvpx
 git archive --format=tar HEAD | xz -c - > ../../sources/build/libvpx/libvpx-src-$(git describe --tags).${ARCHIVE_TYPE}
 )
+
+find ../sources/
+
+echo "Archiving sources: DONE"
+exit 0
