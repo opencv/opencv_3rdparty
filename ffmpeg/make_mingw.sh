@@ -145,9 +145,9 @@ OPENH264WRAPPER_ARGS="-Wl,${openh264_x86_DIR}/lib/openh264_wrapper.o"
 i686-w64-mingw32-gcc \
  -m32 -s -Wall -shared -o ${CURRENT_DIR}/opencv_ffmpeg.dll -O2 -x c++ -I${FFMPEG_x86_DIR}/install/include -I${OPENCV_LOCATION}/modules/videoio/src ${CURRENT_DIR}/ffopencv.c -Wl,${BUILD_DIR}/opencv_ffmpeg.o \
  -L${FFMPEG_x86_DIR}/install/lib -L${libvpx_x86_DIR}/install/lib -lavformat -lavcodec -lavdevice -lswscale -lavutil -lvpx -lsecur32 -lws2_32 -lswresample -static -lbcrypt -static-libgcc -static-libstdc++ -Wl,-Bstatic \
- ${OPENH264WRAPPER_ARGS} -lstdc++ "-DCV_UNUSED(x)=(void)x"
+ ${OPENH264WRAPPER_ARGS} -lstdc++
 OPENH264WRAPPER_ARGS="-Wl,${openh264_x86_64_DIR}/lib/openh264_wrapper.o"
 x86_64-w64-mingw32-gcc \
  -m64 -s -Wall -shared -o ${CURRENT_DIR}/opencv_ffmpeg_64.dll -O2 -x c++ -I${FFMPEG_x86_64_DIR}/install/include -I${OPENCV_LOCATION}/modules/videoio/src ${CURRENT_DIR}/ffopencv.c -Wl,${BUILD_DIR}/opencv_ffmpeg_64.o \
  -L${FFMPEG_x86_64_DIR}/install/lib -L${libvpx_x64_DIR}/install/lib -lavformat -lavcodec -lavdevice -lswscale -lavutil -lvpx -lsecur32 -lws2_32 -lswresample -static -lbcrypt -static-libgcc -static-libstdc++ -Wl,-Bstatic \
- ${OPENH264WRAPPER_ARGS} -lstdc++ "-DCV_UNUSED(x)=(void)x"
+ ${OPENH264WRAPPER_ARGS} -lstdc++
