@@ -5,9 +5,12 @@ cd "$( dirname "${BASH_SOURCE[0]}" )"
 docker build -t opencv_ffmpeg_mingw_build_ubuntu1804 docker
 
 echo "Downloading 3rdparty sources..."
-[[ "${BUILD_SKIP_DOWNLOAD_SOURCES}" == "" ]] && ./download_src.sh
+if [[ ! "${BUILD_SKIP_DOWNLOAD_SOURCES}" ]]; then
+  ./download_src.sh
+fi
 
-export | grep -e '-x BUILD_' > ../build/env.sh
+echo "Capture/exporting BUILD_* vars..."
+export | (grep -e '-x BUILD_' || true) > ../build/env.sh
 
 echo "Running docker container:"
 docker run --rm=true -it --name opencv_ffmpeg_mingw_build_ubuntu1804 \

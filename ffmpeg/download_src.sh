@@ -27,3 +27,6 @@ update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.7.0
 
 # Pack all source code / build scripts
 ./archive_src.sh
+
+echo "Downloading sources: DONE"
+exit 0
