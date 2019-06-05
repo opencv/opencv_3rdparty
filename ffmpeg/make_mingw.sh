@@ -67,14 +67,15 @@ openh264_x86_64_DIR=${openh264_DIR}/install_x86_64
  mkdir -p ${openh264_x86_DIR}/lib/pkgconfig
  i686-w64-mingw32-gcc -m32 -O2 -I${CURRENT_DIR}/openh264_wrapper -I${openh264_x86_DIR} \
   -c ${CURRENT_DIR}/openh264_wrapper/wels/openh264_wrapper.c -o ${openh264_x86_DIR}/lib/openh264_wrapper.o
+ x86_64-w64-mingw32-ar rcs ${openh264_x86_DIR}/lib/libopenh264_wrapper.a ${openh264_x86_DIR}/lib/openh264_wrapper.o
  cat >${openh264_x86_DIR}/lib/pkgconfig/openh264.pc << EOF
 prefix=${openh264_x86_DIR}
 includedir=\${prefix}/include
 
 Name: OpenH264
 Description: OpenH264 wrapper with dynamic loading
-Version: 1.4
-Libs: \${prefix}/lib/openh264_wrapper.o
+Version: 1.8
+Libs: -L\${prefix}/lib -lopenh264_wrapper
 Libs.private:
 Cflags: -I${CURRENT_DIR}/openh264_wrapper -I\${prefix} -I\${includedir}
 EOF
@@ -91,14 +92,15 @@ EOF
  mkdir -p ${openh264_x86_64_DIR}/lib/pkgconfig
  x86_64-w64-mingw32-gcc -m64 -O2 -I${CURRENT_DIR}/openh264_wrapper -I${openh264_x86_64_DIR} \
   -c ${CURRENT_DIR}/openh264_wrapper/wels/openh264_wrapper.c -o ${openh264_x86_64_DIR}/lib/openh264_wrapper.o
+ x86_64-w64-mingw32-ar rcs ${openh264_x86_64_DIR}/lib/libopenh264_wrapper.a ${openh264_x86_64_DIR}/lib/openh264_wrapper.o
  cat >${openh264_x86_64_DIR}/lib/pkgconfig/openh264.pc << EOF
 prefix=${openh264_x86_64_DIR}
 includedir=\${prefix}/include
 
 Name: OpenH264
 Description: OpenH264 wrapper with dynamic loading
-Version: 1.4
-Libs: \${prefix}/lib/openh264_wrapper.o
+Version: 1.8
+Libs: -L\${prefix}/lib -lopenh264_wrapper
 Libs.private:
 Cflags: -I${CURRENT_DIR}/openh264_wrapper -I\${prefix} -I\${includedir}
 EOF
@@ -134,20 +136,5 @@ FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-avres
  make -j${CPU_COUNT} install
 )
 
-# Build OpenCV DLL
-OPENCV_LOCATION=${BUILD_DIR}/opencv
-if [ ! -d ${OPENCV_LOCATION} ]; then
-  OPENCV_LOCATION=${CURRENT_DIR}/../..
-fi
-i686-w64-mingw32-windres -i ${CURRENT_DIR}/opencv_ffmpeg.rc -o ${BUILD_DIR}/opencv_ffmpeg.o
-x86_64-w64-mingw32-windres -i ${CURRENT_DIR}/opencv_ffmpeg.rc -o ${BUILD_DIR}/opencv_ffmpeg_64.o
-OPENH264WRAPPER_ARGS="-Wl,${openh264_x86_DIR}/lib/openh264_wrapper.o"
-i686-w64-mingw32-gcc \
- -m32 -s -Wall -shared -o ${CURRENT_DIR}/opencv_ffmpeg.dll -O2 -x c++ -I${FFMPEG_x86_DIR}/install/include -I${OPENCV_LOCATION}/modules/videoio/src ${CURRENT_DIR}/ffopencv.c -Wl,${BUILD_DIR}/opencv_ffmpeg.o \
- -L${FFMPEG_x86_DIR}/install/lib -L${libvpx_x86_DIR}/install/lib -lavformat -lavcodec -lavdevice -lswscale -lavutil -lvpx -lsecur32 -lws2_32 -lswresample -static -lbcrypt -static-libgcc -static-libstdc++ -Wl,-Bstatic \
- ${OPENH264WRAPPER_ARGS} -lstdc++
-OPENH264WRAPPER_ARGS="-Wl,${openh264_x86_64_DIR}/lib/openh264_wrapper.o"
-x86_64-w64-mingw32-gcc \
- -m64 -s -Wall -shared -o ${CURRENT_DIR}/opencv_ffmpeg_64.dll -O2 -x c++ -I${FFMPEG_x86_64_DIR}/install/include -I${OPENCV_LOCATION}/modules/videoio/src ${CURRENT_DIR}/ffopencv.c -Wl,${BUILD_DIR}/opencv_ffmpeg_64.o \
- -L${FFMPEG_x86_64_DIR}/install/lib -L${libvpx_x64_DIR}/install/lib -lavformat -lavcodec -lavdevice -lswscale -lavutil -lvpx -lsecur32 -lws2_32 -lswresample -static -lbcrypt -static-libgcc -static-libstdc++ -Wl,-Bstatic \
- ${OPENH264WRAPPER_ARGS} -lstdc++
+## OpenCV plugins
+./build_videoio_plugin.sh

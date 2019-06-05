@@ -41,8 +41,8 @@ TARGET_BRANCH="${BRANCH}_${DATE}"
 
 echo "### Commit ffmpeg wrapper binaries to branch ${TARGET_BRANCH}..."
 (
-  git add ffmpeg/opencv_ffmpeg.dll
-  git add ffmpeg/opencv_ffmpeg_64.dll
+  git add ffmpeg/opencv_videoio_ffmpeg.dll
+  git add ffmpeg/opencv_videoio_ffmpeg_64.dll
   git checkout -B ${TARGET_BRANCH}
   git commit -m "Update ffmpeg binaries (${DATE}-${OPENCV_HASH})"
 )
@@ -61,8 +61,8 @@ echo ""
 echo "1) Create pull request to OpenCV 3rdparty binaries repository with branch ${TARGET_BRANCH}"
 echo "2) Create pull request to OpenCV repository:"
 echo "   with updated hashes in <opencv>/3rdparty/ffmpeg/ffmpeg.cmake:"
-HASH_BIN32=($(md5sum ffmpeg/opencv_ffmpeg.dll))
-HASH_BIN64=($(md5sum ffmpeg/opencv_ffmpeg_64.dll))
+HASH_BIN32=($(md5sum ffmpeg/opencv_videoio_ffmpeg.dll))
+HASH_BIN64=($(md5sum ffmpeg/opencv_videoio_ffmpeg_64.dll))
 HASH_CMAKE=($(md5sum ffmpeg/ffmpeg_version.cmake))
 echo ""
 echo "# Binaries branch name: ${TARGET_BRANCH}"

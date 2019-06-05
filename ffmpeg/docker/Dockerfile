@@ -12,7 +12,7 @@ RUN \
 RUN \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    cmake texinfo yasm bison subversion cvs m4 flex pax \
+    cmake texinfo yasm bison subversion cvs m4 flex pax ninja-build \
     && \
   rm -rf /var/lib/apt/lists/*
 
@@ -22,6 +22,5 @@ RUN \
     mingw-w64 g++-mingw-w64-x86-64 g++-mingw-w64-i686 yasm nasm \
     && \
   rm -rf /var/lib/apt/lists/*
-
 
 CMD ["/app/docker/entry.sh"]

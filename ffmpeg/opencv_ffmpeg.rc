@@ -1,5 +1,13 @@
 #include <winver.h>
 
+#ifndef FFMPEG_INTERNAL_NAME
+#error Configuration error, missing FFMPEG_INTERNAL_NAME
+#endif
+
+#define STR_(__A) #__A
+#define STR(__A)  STR_(__A)
+
+
 VS_VERSION_INFO         VERSIONINFO
   FILEVERSION           2018,11,0,0
   PRODUCTVERSION        2018,11,0,0
@@ -19,11 +27,11 @@ BEGIN
     BEGIN
       VALUE "FileDescription",	"OpenCV FFmpeg wrapper\0"
       VALUE "FileVersion",	"2018.11.0\0"
-      VALUE "InternalName",	"opencv_ffmpeg\0"
+      VALUE "InternalName",	STR(FFMPEG_INTERNAL_NAME) "\0"
 #if 0
       VALUE "LegalCopyright",	"\0"
 #endif
-      VALUE "OriginalFilename",	"opencv_ffmpeg.dll\0"
+      VALUE "OriginalFilename",	STR(FFMPEG_INTERNAL_NAME) ".dll\0"
       VALUE "ProductName",	"OpenCV FFmpeg wrapper\0"
       VALUE "ProductVersion",	"2018.11.0\0"
 #if 1
