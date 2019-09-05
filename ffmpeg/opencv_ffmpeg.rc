@@ -9,8 +9,8 @@
 
 
 VS_VERSION_INFO         VERSIONINFO
-  FILEVERSION           2019,06,0,0
-  PRODUCTVERSION        2019,06,0,0
+  FILEVERSION           2019,09,0,0
+  PRODUCTVERSION        2019,09,0,0
   FILEFLAGSMASK         VS_FFI_FILEFLAGSMASK
 #ifdef _DEBUG
   FILEFLAGS             1
@@ -26,14 +26,14 @@ BEGIN
     BLOCK "040904E4"
     BEGIN
       VALUE "FileDescription",	"OpenCV FFmpeg wrapper\0"
-      VALUE "FileVersion",	"2019.06.0\0"
+      VALUE "FileVersion",	"2019.09.0\0"
       VALUE "InternalName",	STR(FFMPEG_INTERNAL_NAME) "\0"
 #if 0
       VALUE "LegalCopyright",	"\0"
 #endif
       VALUE "OriginalFilename",	STR(FFMPEG_INTERNAL_NAME) ".dll\0"
       VALUE "ProductName",	"OpenCV FFmpeg wrapper\0"
-      VALUE "ProductVersion",	"2019.06.0\0"
+      VALUE "ProductVersion",	"2019.09.0\0"
 #if 1
       VALUE "Comments",		"http://opencv.org/\0"
 #endif
