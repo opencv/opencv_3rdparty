@@ -116,7 +116,7 @@ fi
 
 FFMPEG_x86_DIR=${BUILD_DIR}/ffmpeg_x86
 FFMPEG_x86_64_DIR=${BUILD_DIR}/ffmpeg_x86_64
-FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-avresample --enable-w32threads --enable-libopenh264 --enable-libvpx --disable-filters --disable-bsfs --disable-hwaccels --disable-programs --disable-debug --disable-cuda --disable-cuvid --disable-nvenc"
+FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-avresample --enable-w32threads --enable-libopenh264 --enable-libvpx --disable-filters --disable-bsfs --disable-programs --disable-debug --disable-cuda --disable-cuvid --disable-nvenc"
 #[ -d ${FFMPEG_x86_DIR} ] ||
 (
  cd ${FFMPEG_DIR}
