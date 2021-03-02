@@ -41,6 +41,7 @@ TARGET_BRANCH="${BRANCH}_${DATE}"
 
 echo "### Commit ffmpeg wrapper binaries to branch ${TARGET_BRANCH}..."
 (
+  ls -l ffmpeg/*.dll
   git add ffmpeg/opencv_videoio_ffmpeg.dll
   git add ffmpeg/opencv_videoio_ffmpeg_64.dll
   git checkout -B ${TARGET_BRANCH}
