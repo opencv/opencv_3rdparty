@@ -21,11 +21,11 @@ mkdir -p ../build
 (
 cd ../build
 # https://github.com/FFmpeg/FFmpeg/releases
-update ffmpeg git://source.ffmpeg.org/ffmpeg.git n4.3.2
+update ffmpeg git://source.ffmpeg.org/ffmpeg.git n4.4
 # https://github.com/cisco/openh264/releases
 update openh264 https://github.com/cisco/openh264.git v1.8.0
 # https://chromium.googlesource.com/webm/libvpx.git
-update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.9.0
+update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.10.0
 )
 
 # Pack all source code / build scripts
