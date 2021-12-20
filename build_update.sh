@@ -9,7 +9,7 @@ echo "### Update code from OpenCV repository..."
 [[ "${BUILD_SKIP_OPENCV_UPDATE}" == "" ]] &&
 (
   cd opencv
-  git fetch https://github.com/opencv/opencv.git master
+  git fetch https://github.com/opencv/opencv.git 4.x
   if [[ `git merge-base HEAD FETCH_HEAD` != `git rev-parse HEAD` ]]; then
     echo "OpenCV folder contains changes. Please save your changes and checkout the latest code: $(pwd)"
     exit 1
