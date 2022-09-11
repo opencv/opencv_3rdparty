@@ -6,6 +6,7 @@ mkdir -p ../sources/opencv
 mkdir -p ../sources/build/ffmpeg
 mkdir -p ../sources/build/libvpx
 mkdir -p ../sources/build/openh264
+mkdir -p ../sources/build/aom
 
 ARCHIVE_TYPE=tar.xz
 (
@@ -28,6 +29,10 @@ git archive --format=tar HEAD codec/api/svc LICENSE | xz -c - > ../../sources/bu
 (
 cd ../build/libvpx
 git archive --format=tar HEAD | xz -c - > ../../sources/build/libvpx/libvpx-src-$(git describe --tags).${ARCHIVE_TYPE}
+)
+(
+cd ../build/aom
+git archive --format=tar HEAD | xz -c - > ../../sources/build/aom/aom-src-$(git describe --tags).${ARCHIVE_TYPE}
 )
 
 find ../sources/
