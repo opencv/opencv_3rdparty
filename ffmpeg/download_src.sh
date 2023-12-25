@@ -25,9 +25,9 @@ update ffmpeg git://source.ffmpeg.org/ffmpeg.git n4.4.4
 # https://github.com/cisco/openh264/releases
 update openh264 https://github.com/cisco/openh264.git v1.8.0
 # https://chromium.googlesource.com/webm/libvpx.git
-update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.13.0
+update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.13.1
 # https://aomedia.googlesource.com/aom
-update aom https://aomedia.googlesource.com/aom v3.6.1
+update aom https://aomedia.googlesource.com/aom v3.8.0
 )
 
 # Pack all source code / build scripts
