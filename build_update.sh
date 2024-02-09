@@ -3,9 +3,9 @@
 IPPICV_DATE=${1:?IPPICV date is not passed via argument}
 
 files=($(shopt -s nullglob;shopt -s dotglob;echo downloads/ippicv*))
-if [[ ${#files[@]} != 5 ]]; then
+if [[ ${#files[@]} != 4 ]]; then
   echo "ERROR: Please put IPPICV files (for Windows/Mac/Linux platforms) into the downloads directory first."
-  echo "       Found ${#files[@]} files (expected 5)"
+  echo "       Found ${#files[@]} files (expected 4)"
   exit 1
 fi
 
