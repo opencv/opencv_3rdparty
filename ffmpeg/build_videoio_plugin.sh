@@ -16,7 +16,7 @@ OPENCV_CMAKE_ARGS=(
   -DCMAKE_BUILD_TYPE=Release
   -DBUILD_SHARED_LIBS=OFF
   -DCPU_DISPATCH=
-  -DOPENCV_EXTRA_FLAGS="-DCV_EXPORTS= -D_GNU_SOURCE="
+  "-DOPENCV_EXTRA_FLAGS=-DCV_EXPORTS= -D_GNU_SOURCE="
   -DWITH_PTHREADS_PF=OFF
   -DWITH_IPP=OFF -DWITH_ADE=OFF -DWITH_LAPACK=OFF -DWITH_OPENCL=OFF -DWITH_DIRECTX=OFF -DWITH_WIN32UI=OFF
   -DWITH_EIGEN=OFF -DWITH_JPEG=OFF -DWITH_WEBP=OFF -DWITH_JASPER=OFF -DWITH_OPENJPEG=OFF -DWITH_OPENEXR=OFF -DWITH_PNG=OFF -DWITH_TIFF=OFF
@@ -72,7 +72,7 @@ build_plugin_64()
   cmake -GNinja \
       -DCMAKE_TOOLCHAIN_FILE=$CURRENT_DIR/mingw-toolchain-x86_64.cmake \
       -DOpenCV_DIR=${BUILD_DIR}/opencv_x86_64 \
-      ${OPENCV_PLUGIN_CMAKE_ARGS[@]}
+      "${OPENCV_PLUGIN_CMAKE_ARGS[@]}"
   ninja -v
   ninja install/strip
   strings ./opencv_videoio_ffmpeg_64.dll | grep '/src/' | grep opencv | uniq
@@ -114,7 +114,7 @@ build_plugin_32()
   cmake -GNinja \
       -DCMAKE_TOOLCHAIN_FILE=$CURRENT_DIR/mingw-toolchain-i686.cmake \
       -DOpenCV_DIR=${BUILD_DIR}/opencv_x86 \
-      ${OPENCV_PLUGIN_CMAKE_ARGS[@]}
+      "${OPENCV_PLUGIN_CMAKE_ARGS[@]}"
   ninja -v
   ninja install/strip
   strings ./opencv_videoio_ffmpeg.dll | grep '/src/' | grep opencv | uniq
