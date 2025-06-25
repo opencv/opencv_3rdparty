@@ -14,5 +14,6 @@ export | (grep -e '-x BUILD_' || true) > ../build/env.sh
 
 echo "Running docker container:"
 docker run --rm=true -it --name opencv_ffmpeg_mingw_build_ubuntu2014 \
+${OPENCV_FFMPEG_DOCKER_EXTRA_ARGS:-} \
 -e "APP_UID=$UID" -e APP_GID=$GROUPS \
 -v $(pwd):/app -v $(pwd)/../build:/build -v $(pwd)/../opencv:/build/opencv opencv_ffmpeg_mingw_build_ubuntu2014

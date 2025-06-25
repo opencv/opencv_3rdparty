@@ -8,7 +8,7 @@
 
 CURRENT_DIR=`pwd`
 BUILD_DIR=${1:-/build}
-CPU_COUNT=$(nproc || echo 4)
+CPU_COUNT=$(nproc || echo 4)  # use OPENCV_FFMPEG_DOCKER_EXTRA_ARGS="--cpuset-cpus=0,2,4,6,8,10,12,14" to tune
 
 DST_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
