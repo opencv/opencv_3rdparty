@@ -27,7 +27,7 @@ update openh264 https://github.com/cisco/openh264.git v1.8.0
 # https://chromium.googlesource.com/webm/libvpx.git
 update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.15.2
 # https://aomedia.googlesource.com/aom
-update aom https://aomedia.googlesource.com/aom v3.12.1
+update aom https://aomedia.googlesource.com/aom v3.13.1
 )
 
 # Pack all source code / build scripts
