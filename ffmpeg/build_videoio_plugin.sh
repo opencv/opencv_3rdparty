@@ -28,7 +28,7 @@ OPENCV_CMAKE_ARGS=(
 )
 
 OPENCV_PLUGIN_CMAKE_ARGS=(
-  "-DCMAKE_MODULE_LINKER_FLAGS=-static -lbcrypt -static-libgcc -static-libstdc++ -Wl,--gc-sections -Wl,-Bsymbolic"
+  -DCMAKE_MODULE_LINKER_FLAGS="-lbcrypt -Wl,/OPT:REF -Wl,/OPT:ICF"
   -DCMAKE_BUILD_TYPE=Release
   -DOPENCV_PLUGIN_MODULE_PREFIX=
   -DOPENCV_FFMPEG_SKIP_DOWNLOAD=ON
@@ -80,6 +80,53 @@ build_plugin_64()
 )
 }
 
+build_opencv_arm64()
+{
+(
+  [[ -n "${CLEAN_BUILD_DIR}" ]] && {
+    rm -rf ${BUILD_DIR}/opencv_arm64
+  }
+
+  mkdir -p ${BUILD_DIR}/opencv_arm64
+  pushd ${BUILD_DIR}/opencv_arm64
+  rm -rf CMake* || true
+
+  set -e
+  set -x
+
+  cmake -GNinja \
+  -DCMAKE_TOOLCHAIN_FILE=$CURRENT_DIR/llvm-toolchain-arm64.cmake \
+  "${OPENCV_CMAKE_ARGS[@]}" -DENABLE_FP16=OFF \
+  /build/opencv
+
+  ninja opencv_modules -j${CPU_COUNT}
+  popd
+)
+}
+
+build_plugin_arm64()
+{
+(
+  rm -rf ${BUILD_DIR}/opencv_ffmpeg_plugin_arm64
+  mkdir -p ${BUILD_DIR}/opencv_ffmpeg_plugin_arm64
+  pushd ${BUILD_DIR}/opencv_ffmpeg_plugin_arm64
+
+  set -e
+  set -x
+  PKG_CONFIG_PATH=${BUILD_DIR}/ffmpeg_arm64/install/lib/pkgconfig \
+  RCFLAGS=-DFFMPEG_INTERNAL_NAME=opencv_videoio_ffmpeg_arm64 \
+  cmake -GNinja \
+      -DCMAKE_TOOLCHAIN_FILE=$CURRENT_DIR/llvm-toolchain-arm64.cmake \
+      -DOpenCV_DIR=${BUILD_DIR}/opencv_arm64 \
+      -DCMAKE_SHARED_LINKER_FLAGS="-lucrt" \
+      "${OPENCV_PLUGIN_CMAKE_ARGS[@]}"
+  ninja -v
+  ninja install/strip
+  strings ./opencv_videoio_ffmpeg_64.dll | grep '/src/' | grep opencv | uniq
+  popd
+)
+}
+
 build_opencv_32()
 {
 (
@@ -122,7 +169,7 @@ build_plugin_32()
 )
 }
 
-DEFAULT_TASKS=${1:-build_opencv_64 build_plugin_64 build_opencv_32 build_plugin_32}
+DEFAULT_TASKS=${1:-build_opencv_arm64 build_plugin_arm64}
 for t in $DEFAULT_TASKS $@; do
   echo "Task: $t"
   $t

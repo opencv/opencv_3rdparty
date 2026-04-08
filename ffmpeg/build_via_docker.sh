@@ -1,6 +1,7 @@
 #!/bin/bash -e
 cd "$( dirname "${BASH_SOURCE[0]}" )"
-
+export MSYS_NO_PATHCONV=1
+export MSYS2_ARG_CONV_EXCL="*"
 # Build Docker image
 docker build -t opencv_ffmpeg_mingw_build_ubuntu2014 docker
 
