@@ -23,4 +23,6 @@ RUN \
     && \
   rm -rf /var/lib/apt/lists/*
 
+USER ubuntu
+
 CMD ["/app/docker/entry.sh"]

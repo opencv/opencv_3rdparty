@@ -21,13 +21,13 @@ mkdir -p ../build
 (
 cd ../build
 # https://github.com/FFmpeg/FFmpeg/tags
-update ffmpeg git://source.ffmpeg.org/ffmpeg.git n7.1
+update ffmpeg git://source.ffmpeg.org/ffmpeg.git n7.1.4
 # https://github.com/cisco/openh264/releases
 update openh264 https://github.com/cisco/openh264.git v2.5.0
 # https://chromium.googlesource.com/webm/libvpx.git
-update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.15.0
+update libvpx https://chromium.googlesource.com/webm/libvpx.git v1.16.0
 # https://aomedia.googlesource.com/aom
-update aom https://aomedia.googlesource.com/aom v3.11.0
+update aom https://aomedia.googlesource.com/aom v3.14.1
 )
 
 # Pack all source code / build scripts
