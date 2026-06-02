@@ -21,7 +21,7 @@ mkdir -p ../build
 (
 cd ../build
 # https://github.com/FFmpeg/FFmpeg/tags
-update ffmpeg git://source.ffmpeg.org/ffmpeg.git n7.1.4
+update ffmpeg git://source.ffmpeg.org/ffmpeg.git n7.1
 # https://github.com/cisco/openh264/releases
 update openh264 https://github.com/cisco/openh264.git v2.5.0
 # https://chromium.googlesource.com/webm/libvpx.git
