@@ -119,13 +119,13 @@ AOM_CONFIGURE_OPTIONS="-DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TOOLS=O
 (
   mkdir -p "${AOM_X86_DIR}"
   cd "${AOM_X86_DIR}"
-  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/build/cmake/toolchains/x86-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X86_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
+  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X86_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
   cmake --build . --target install
 )
 (
   mkdir -p "${AOM_X64_DIR}"
   cd "${AOM_X64_DIR}"
-  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/build/cmake/toolchains/x86_64-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X64_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
+  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86_64-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X64_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
   cmake --build . --target install
 )
 
