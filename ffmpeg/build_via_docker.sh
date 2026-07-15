@@ -2,7 +2,7 @@
 cd "$( dirname "${BASH_SOURCE[0]}" )"
 
 # Build Docker image
-docker build -t opencv_ffmpeg_mingw_build_ubuntu2014 docker
+docker build -t opencv_ffmpeg_mingw_build_ubuntu2404 docker
 
 echo "Downloading 3rdparty sources..."
 if [[ ! "${BUILD_SKIP_DOWNLOAD_SOURCES}" ]]; then
@@ -13,7 +13,6 @@ echo "Capture/exporting BUILD_* vars..."
 export | (grep -e '-x BUILD_' || true) > ../build/env.sh
 
 echo "Running docker container:"
-docker run --rm=true -it --name opencv_ffmpeg_mingw_build_ubuntu2014 \
-${OPENCV_FFMPEG_DOCKER_EXTRA_ARGS:-} \
+docker run --rm=true -it --name opencv_ffmpeg_mingw_build_ubuntu2404 \
 -e "APP_UID=$UID" -e APP_GID=$GROUPS \
--v $(pwd):/app -v $(pwd)/../build:/build -v $(pwd)/../opencv:/build/opencv opencv_ffmpeg_mingw_build_ubuntu2014
+-v $(pwd):/app -v $(pwd)/../build:/build -v $(pwd)/../opencv:/build/opencv opencv_ffmpeg_mingw_build_ubuntu2404

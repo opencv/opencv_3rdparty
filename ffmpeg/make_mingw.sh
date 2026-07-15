@@ -13,7 +13,7 @@
 
 CURRENT_DIR=`pwd`
 BUILD_DIR=${1:-.}
-CPU_COUNT=$(nproc || echo 4)  # use OPENCV_FFMPEG_DOCKER_EXTRA_ARGS="--cpuset-cpus=0,2,4,6,8,10,12,14" to tune
+CPU_COUNT=$(nproc || echo 4)
 
 ## Libvpx
 
@@ -119,13 +119,13 @@ AOM_CONFIGURE_OPTIONS="-DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TOOLS=O
 (
   mkdir -p "${AOM_X86_DIR}"
   cd "${AOM_X86_DIR}"
-  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/build/cmake/toolchains/x86-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X86_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
+  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X86_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
   cmake --build . --target install
 )
 (
   mkdir -p "${AOM_X64_DIR}"
   cd "${AOM_X64_DIR}"
-  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/build/cmake/toolchains/x86_64-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X64_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
+  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86_64-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X64_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
   cmake --build . --target install
 )
 
@@ -139,7 +139,7 @@ fi
 
 FFMPEG_x86_DIR=${BUILD_DIR}/ffmpeg_x86
 FFMPEG_x86_64_DIR=${BUILD_DIR}/ffmpeg_x86_64
-FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-avresample --enable-w32threads --enable-libopenh264 --enable-libvpx --disable-filters --disable-bsfs --disable-programs --disable-debug --disable-cuda --disable-cuvid --disable-nvenc --enable-libaom"
+FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-w32threads --enable-libopenh264 --enable-libvpx --disable-filters --disable-bsfs --disable-programs --disable-debug --disable-cuda --disable-cuvid --disable-nvenc --enable-libaom"
 #[ -d ${FFMPEG_x86_DIR} ] ||
 (
  cd ${FFMPEG_DIR}
