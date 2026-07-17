@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
 RUN \
   apt-get update && \
@@ -22,5 +22,7 @@ RUN \
     mingw-w64 g++-mingw-w64-x86-64 g++-mingw-w64-i686 yasm nasm \
     && \
   rm -rf /var/lib/apt/lists/*
+
+USER ubuntu
 
 CMD ["/app/docker/entry.sh"]
