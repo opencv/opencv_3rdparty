@@ -28,7 +28,7 @@ OPENCV_CMAKE_ARGS=(
 )
 
 OPENCV_PLUGIN_CMAKE_ARGS=(
-  "-DCMAKE_MODULE_LINKER_FLAGS=-static -lbcrypt -static-libgcc -static-libstdc++ -Wl,--gc-sections -Wl,-Bsymbolic"
+  "-DCMAKE_MODULE_LINKER_FLAGS=-static -lbcrypt -Wl,--gc-sections"
   -DCMAKE_BUILD_TYPE=Release
   -DOPENCV_PLUGIN_MODULE_PREFIX=
   -DOPENCV_FFMPEG_SKIP_DOWNLOAD=ON

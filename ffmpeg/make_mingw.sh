@@ -31,7 +31,7 @@ cd ${libvpx_DIR}
 mkdir -p ${libvpx_x86_DIR}
 rsync -a ./ ${libvpx_x86_DIR} --exclude .git
 cd ${libvpx_x86_DIR}
-CROSS=i686-w64-mingw32- ./configure --target=x86-win32-gcc ${libvpx_configure_OPTIONS} --prefix=${libvpx_x86_DIR}/install
+CC=i686-w64-mingw32-clang CXX=i686-w64-mingw32-clang++ CROSS=i686-w64-mingw32- ./configure --target=x86-win32-gcc ${libvpx_configure_OPTIONS} --prefix=${libvpx_x86_DIR}/install
 make -j ${CPU_COUNT}
 make install
 )
@@ -41,7 +41,7 @@ cd ${libvpx_DIR}
 mkdir -p ${libvpx_x64_DIR}
 rsync -a ./ ${libvpx_x64_DIR} --exclude .git
 cd ${libvpx_x64_DIR}
-CROSS=x86_64-w64-mingw32- ./configure --target=x86_64-win64-gcc ${libvpx_configure_OPTIONS} --prefix=${libvpx_x64_DIR}/install
+CC=x86_64-w64-mingw32-clang CXX=x86_64-w64-mingw32-clang++ CROSS=x86_64-w64-mingw32- ./configure --target=x86_64-win64-gcc ${libvpx_configure_OPTIONS} --prefix=${libvpx_x64_DIR}/install
 make -j ${CPU_COUNT}
 make install
 )
@@ -65,7 +65,7 @@ openh264_x86_64_DIR=${openh264_DIR}/install_x86_64
   install -m 644 ${openh264_DIR}/codec/api/svc/codec*.h ${PREFIX}/include/wels
  fi
  mkdir -p ${openh264_x86_DIR}/lib/pkgconfig
- i686-w64-mingw32-gcc -m32 -O2 -I${CURRENT_DIR}/openh264_wrapper -I${openh264_x86_DIR} \
+ i686-w64-mingw32-clang -m32 -O2 -I${CURRENT_DIR}/openh264_wrapper -I${openh264_x86_DIR} \
   -c ${CURRENT_DIR}/openh264_wrapper/wels/openh264_wrapper.c -o ${openh264_x86_DIR}/lib/openh264_wrapper.o
  x86_64-w64-mingw32-ar rcs ${openh264_x86_DIR}/lib/libopenh264_wrapper.a ${openh264_x86_DIR}/lib/openh264_wrapper.o
  cat >${openh264_x86_DIR}/lib/pkgconfig/openh264.pc << EOF
@@ -90,7 +90,7 @@ EOF
   install -m 644 ${openh264_DIR}/codec/api/svc/codec*.h ${PREFIX}/include/wels
  fi
  mkdir -p ${openh264_x86_64_DIR}/lib/pkgconfig
- x86_64-w64-mingw32-gcc -m64 -O2 -I${CURRENT_DIR}/openh264_wrapper -I${openh264_x86_64_DIR} \
+ x86_64-w64-mingw32-clang -m64 -O2 -I${CURRENT_DIR}/openh264_wrapper -I${openh264_x86_64_DIR} \
   -c ${CURRENT_DIR}/openh264_wrapper/wels/openh264_wrapper.c -o ${openh264_x86_64_DIR}/lib/openh264_wrapper.o
  x86_64-w64-mingw32-ar rcs ${openh264_x86_64_DIR}/lib/libopenh264_wrapper.a ${openh264_x86_64_DIR}/lib/openh264_wrapper.o
  cat >${openh264_x86_64_DIR}/lib/pkgconfig/openh264.pc << EOF
@@ -119,13 +119,25 @@ AOM_CONFIGURE_OPTIONS="-DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TOOLS=O
 (
   mkdir -p "${AOM_X86_DIR}"
   cd "${AOM_X86_DIR}"
-  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X86_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
+  cmake -GNinja -DAOM_TARGET_CPU=generic \
+    -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86-mingw-gcc.cmake \
+    -DCMAKE_C_COMPILER=i686-w64-mingw32-clang \
+    -DCMAKE_CXX_COMPILER=i686-w64-mingw32-clang++ \
+    -DCMAKE_AR=/opt/llvm-mingw/bin/i686-w64-mingw32-ar \
+    -DCMAKE_RANLIB=/opt/llvm-mingw/bin/i686-w64-mingw32-ranlib \
+    -DCMAKE_INSTALL_PREFIX=${AOM_X86_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
   cmake --build . --target install
 )
 (
   mkdir -p "${AOM_X64_DIR}"
   cd "${AOM_X64_DIR}"
-  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86_64-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X64_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
+  cmake -GNinja -DAOM_TARGET_CPU=generic \
+    -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86_64-mingw-gcc.cmake \
+    -DCMAKE_C_COMPILER=x86_64-w64-mingw32-clang \
+    -DCMAKE_CXX_COMPILER=x86_64-w64-mingw32-clang++ \
+    -DCMAKE_AR=/opt/llvm-mingw/bin/x86_64-w64-mingw32-ar \
+    -DCMAKE_RANLIB=/opt/llvm-mingw/bin/x86_64-w64-mingw32-ranlib \
+    -DCMAKE_INSTALL_PREFIX=${AOM_X64_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
   cmake --build . --target install
 )
 
@@ -146,7 +158,7 @@ FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-w32th
  mkdir -p ${FFMPEG_x86_DIR}
  rsync -a ./ ${FFMPEG_x86_DIR} --exclude .git
  cd ${FFMPEG_x86_DIR}
- PKG_CONFIG_PATH=${openh264_x86_DIR}/lib/pkgconfig:${libvpx_x86_DIR}/install/lib/pkgconfig:${AOM_X86_DIR}/install/lib/pkgconfig ./configure --enable-cross-compile --arch=x86 --target-os=mingw32 --cross-prefix=i686-w64-mingw32- ${FFMPEG_CONFIGURE_OPTIONS} --prefix=`pwd`/install
+ PKG_CONFIG_PATH=${openh264_x86_DIR}/lib/pkgconfig:${libvpx_x86_DIR}/install/lib/pkgconfig:${AOM_X86_DIR}/install/lib/pkgconfig ./configure --enable-cross-compile --arch=x86 --target-os=mingw32 --cross-prefix=i686-w64-mingw32- --cc=i686-w64-mingw32-clang --cxx=i686-w64-mingw32-clang++ ${FFMPEG_CONFIGURE_OPTIONS} --prefix=`pwd`/install
  make -j${CPU_COUNT} install
 )
 #[ -d ${FFMPEG_x86_64_DIR} ] ||
@@ -155,7 +167,7 @@ FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-w32th
  mkdir -p ${FFMPEG_x86_64_DIR}
  rsync -a ./ ${FFMPEG_x86_64_DIR} --exclude .git
  cd ${FFMPEG_x86_64_DIR}
- PKG_CONFIG_PATH=${openh264_x86_64_DIR}/lib/pkgconfig:${libvpx_x64_DIR}/install/lib/pkgconfig:${AOM_X64_DIR}/install/lib/pkgconfig ./configure --enable-cross-compile --arch=x86_64 --target-os=mingw32 --cross-prefix=x86_64-w64-mingw32- ${FFMPEG_CONFIGURE_OPTIONS} --prefix=`pwd`/install
+ PKG_CONFIG_PATH=${openh264_x86_64_DIR}/lib/pkgconfig:${libvpx_x64_DIR}/install/lib/pkgconfig:${AOM_X64_DIR}/install/lib/pkgconfig ./configure --enable-cross-compile --arch=x86_64 --target-os=mingw32 --cross-prefix=x86_64-w64-mingw32- --cc=x86_64-w64-mingw32-clang --cxx=x86_64-w64-mingw32-clang++ ${FFMPEG_CONFIGURE_OPTIONS} --prefix=`pwd`/install
  make -j${CPU_COUNT} install
 )
 

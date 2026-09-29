@@ -19,9 +19,17 @@ RUN \
 RUN \
   apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    mingw-w64 g++-mingw-w64-x86-64 g++-mingw-w64-i686 yasm nasm \
+    wget xz-utils yasm nasm \
     && \
   rm -rf /var/lib/apt/lists/*
+
+RUN \
+  wget -q https://github.com/mstorsjo/llvm-mingw/releases/download/20240606/llvm-mingw-20240606-msvcrt-ubuntu-20.04-x86_64.tar.xz && \
+  tar -xf llvm-mingw-20240606-msvcrt-ubuntu-20.04-x86_64.tar.xz -C /opt && \
+  rm llvm-mingw-*.tar.xz && \
+  mv /opt/llvm-mingw-* /opt/llvm-mingw
+
+ENV PATH="/opt/llvm-mingw/bin:${PATH}"
 
 USER ubuntu
 
