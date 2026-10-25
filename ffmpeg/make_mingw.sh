@@ -29,7 +29,7 @@ fi
 (
 cd ${libvpx_DIR}
 mkdir -p ${libvpx_x86_DIR}
-rsync -a ./ ${libvpx_x86_DIR} --exclude .git
+rsync -a --delete ./ ${libvpx_x86_DIR} --exclude .git
 cd ${libvpx_x86_DIR}
 CROSS=i686-w64-mingw32- ./configure --target=x86-win32-gcc ${libvpx_configure_OPTIONS} --prefix=${libvpx_x86_DIR}/install
 make -j ${CPU_COUNT}
@@ -39,7 +39,7 @@ make install
 (
 cd ${libvpx_DIR}
 mkdir -p ${libvpx_x64_DIR}
-rsync -a ./ ${libvpx_x64_DIR} --exclude .git
+rsync -a --delete ./ ${libvpx_x64_DIR} --exclude .git
 cd ${libvpx_x64_DIR}
 CROSS=x86_64-w64-mingw32- ./configure --target=x86_64-win64-gcc ${libvpx_configure_OPTIONS} --prefix=${libvpx_x64_DIR}/install
 make -j ${CPU_COUNT}
@@ -119,13 +119,13 @@ AOM_CONFIGURE_OPTIONS="-DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF -DENABLE_TOOLS=O
 (
   mkdir -p "${AOM_X86_DIR}"
   cd "${AOM_X86_DIR}"
-  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X86_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
+  cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X86_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
   cmake --build . --target install
 )
 (
   mkdir -p "${AOM_X64_DIR}"
   cd "${AOM_X64_DIR}"
-  cmake -GNinja -DAOM_TARGET_CPU=generic -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86_64-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X64_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
+  cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=${AOM_DIR}/cmake/toolchains/x86_64-mingw-gcc.cmake -DCMAKE_INSTALL_PREFIX=${AOM_X64_DIR}/install ${AOM_CONFIGURE_OPTIONS} ${AOM_DIR}
   cmake --build . --target install
 )
 
@@ -140,20 +140,20 @@ fi
 FFMPEG_x86_DIR=${BUILD_DIR}/ffmpeg_x86
 FFMPEG_x86_64_DIR=${BUILD_DIR}/ffmpeg_x86_64
 FFMPEG_CONFIGURE_OPTIONS="--pkg-config=pkg-config --enable-static --enable-w32threads --enable-libopenh264 --enable-libvpx --disable-filters --disable-bsfs --disable-programs --disable-debug --disable-cuda --disable-cuvid --disable-nvenc --enable-libaom"
-#[ -d ${FFMPEG_x86_DIR} ] ||
+[ -d ${FFMPEG_x86_DIR} ] ||
 (
- cd ${FFMPEG_DIR}
- mkdir -p ${FFMPEG_x86_DIR}
- rsync -a ./ ${FFMPEG_x86_DIR} --exclude .git
- cd ${FFMPEG_x86_DIR}
- PKG_CONFIG_PATH=${openh264_x86_DIR}/lib/pkgconfig:${libvpx_x86_DIR}/install/lib/pkgconfig:${AOM_X86_DIR}/install/lib/pkgconfig ./configure --enable-cross-compile --arch=x86 --target-os=mingw32 --cross-prefix=i686-w64-mingw32- ${FFMPEG_CONFIGURE_OPTIONS} --prefix=`pwd`/install
- make -j${CPU_COUNT} install
+cd ${FFMPEG_DIR}
+mkdir -p ${FFMPEG_x86_DIR}
+rsync -a --delete ./ ${FFMPEG_x86_DIR} --exclude .git
+cd ${FFMPEG_x86_DIR}
+PKG_CONFIG_PATH=${openh264_x86_DIR}/lib/pkgconfig:${libvpx_x86_DIR}/install/lib/pkgconfig:${AOM_X86_DIR}/install/lib/pkgconfig ./configure --enable-cross-compile --arch=x86 --target-os=mingw32 --cross-prefix=i686-w64-mingw32- ${FFMPEG_CONFIGURE_OPTIONS} --prefix=`pwd`/install
+make -j${CPU_COUNT} install
 )
 #[ -d ${FFMPEG_x86_64_DIR} ] ||
 (
  cd ${FFMPEG_DIR}
  mkdir -p ${FFMPEG_x86_64_DIR}
- rsync -a ./ ${FFMPEG_x86_64_DIR} --exclude .git
+ rsync -a --delete ./ ${FFMPEG_x86_64_DIR} --exclude .git
  cd ${FFMPEG_x86_64_DIR}
  PKG_CONFIG_PATH=${openh264_x86_64_DIR}/lib/pkgconfig:${libvpx_x64_DIR}/install/lib/pkgconfig:${AOM_X64_DIR}/install/lib/pkgconfig ./configure --enable-cross-compile --arch=x86_64 --target-os=mingw32 --cross-prefix=x86_64-w64-mingw32- ${FFMPEG_CONFIGURE_OPTIONS} --prefix=`pwd`/install
  make -j${CPU_COUNT} install
