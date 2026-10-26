@@ -1,23 +1,23 @@
 #!/bin/bash -e
 
-# if ! git diff-index --quiet HEAD --; then
-#   echo "You have uncommited changes. Please commit your changes first"
-#   exit 1
-# fi
+if ! git diff-index --quiet HEAD --; then
+  echo "You have uncommited changes. Please commit your changes first"
+  exit 1
+fi
 
 echo "### Update code from OpenCV repository..."
 [[ "${BUILD_SKIP_OPENCV_UPDATE}" == "" ]] &&
 (
   cd opencv
   git fetch https://github.com/opencv/opencv.git 5.x
-#   if [[ `git merge-base HEAD FETCH_HEAD` != `git rev-parse HEAD` ]]; then
-#     echo "OpenCV folder contains changes. Please save your changes and checkout the latest code: $(pwd)"
-#     exit 1
-#   fi
-#   if ! git diff-index --quiet HEAD --; then
-#     echo "OpenCV folder contains unsaved changes. Please save (stash) your changes and checkout the latest code: $(pwd)"
-#     exit 1
-#   fi
+  if [[ `git merge-base HEAD FETCH_HEAD` != `git rev-parse HEAD` ]]; then
+    echo "OpenCV folder contains changes. Please save your changes and checkout the latest code: $(pwd)"
+    exit 1
+  fi
+  if ! git diff-index --quiet HEAD --; then
+    echo "OpenCV folder contains unsaved changes. Please save (stash) your changes and checkout the latest code: $(pwd)"
+    exit 1
+  fi
   git checkout -B ffmpeg_update FETCH_HEAD
 )
 OPENCV_HASH=`cd opencv; git rev-parse HEAD`
