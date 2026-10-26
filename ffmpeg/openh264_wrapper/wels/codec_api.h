@@ -93,11 +93,11 @@ static int _loadLibrary(const char* name, LIBRARY_HANDLE_TYPE* handle)
 #define GETADDR(name) GetProcAddress(handle, #name)
 #elif defined __linux__ || defined __APPLE__
     *handle = dlopen(name, RTLD_LAZY | RTLD_GLOBAL);
-#define GETADDR(name) dlsym(handle, #name)
+    #define GETADDR(name) dlsym(handle, #name)
 #else
 #error "Not supported platform"
 #endif
-    return (handle != NULL) ? 1 : 0;
+    return (*handle != NULL) ? 1 : 0;
 }
 
 
@@ -106,22 +106,22 @@ static void _initLibrary(void)
     static const char* defaultLibraryName =
 #ifdef _WIN32
 #if defined _M_X64 || defined __x86_64__
-        "openh264-2.5.0-win64.dll"
+        "openh264-2.7.0-win64.dll"
 #else
-        "openh264-2.5.0-win32.dll"
+        "openh264-2.7.0-win32.dll"
 #endif
 // Linux/Unix based on dlopen/dlsym
 #elif defined __linux__
 # if defined __x86_64__
-        "libopenh264-2.5.0-linux64.4.so"
+        "libopenh264-2.7.0-linux64.4.so"
 # else
-        "libopenh264-2.5.0-linux32.4.so"
+        "libopenh264-2.7.0-linux32.4.so"
 # endif
 #elif defined __APPLE__
 # if defined __x86_64__
-        "libopenh264-2.5.0-osx64.4.dylib"
+        "libopenh264-2.7.0-osx64.4.dylib"
 # else
-        "libopenh264-2.5.0-osx32.4.dylib"
+        "libopenh264-2.7.0-osx32.4.dylib"
 # endif
 #else
 #error "Not supported platform"
